@@ -1,6 +1,4 @@
 /.env
 /reports/*
-/tests/*/reports/*
+/tests/reports/*
 /.idea/*
-/utils/snipet.py
-/tests/test.py
