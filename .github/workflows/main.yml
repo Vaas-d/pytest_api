@@ -67,6 +67,6 @@ jobs:
         with:
           status: ${{ job.status }}
           message_format: ${{ secrets.GH_ACTIONS_URL }}
-          notify_when: 'failure'
+          notify_when: "success,failure"
         env:
           SLACK_WEBHOOK_URL: ${{ secrets.ACTION_MONITORING_SLACK }}
