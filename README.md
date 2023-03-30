@@ -10,9 +10,9 @@ Also, there is an integrated Slack notification when GitHub Actions runs.
 
 ### 1. Install environment:
 ```
-  python -m pip install --upgrade pip
-  pip install pipenv
-  pipenv install --system
+python -m pip install --upgrade pip
+pip install pipenv
+pipenv install --system
 ```
 
 ### 2. Run playwright tests:
