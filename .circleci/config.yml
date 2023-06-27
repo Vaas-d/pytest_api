@@ -1,0 +1,29 @@
+# CircleCI configuration file
+
+version: 2.1
+
+# Set up Python using circleci orb
+orbs:
+  python: circleci/python@2.1.1
+
+
+jobs:
+  test:
+    executor: python/default
+    steps:
+      - checkout
+      - python/install-packages:
+          pkg-manager: pipenv
+
+      - run:
+          name: crate .env file
+          command: |
+            touch .env
+            echo BASE_URL=${{ secrets.BASE_URL }} >> .env
+            cat .env
+      - run:
+          name: Run tests
+          command: pytest
+
+
+
