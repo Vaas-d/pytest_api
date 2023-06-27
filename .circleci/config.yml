@@ -20,7 +20,7 @@ jobs:
           name: crate .env file
           command: |
             touch .env
-            echo BASE_URL=${{ secrets.BASE_URL }} >> .env
+            echo BASE_URL=$BASE_URL >> .env
             cat .env
       - run:
           name: Run tests
