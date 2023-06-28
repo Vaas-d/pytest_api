@@ -24,7 +24,7 @@ jobs:
             cat .env
       - run:
           name: Run tests
-          command: pytest
+          command: python -m pytest
 
 workflows:
   test_my_code:
