@@ -14,7 +14,7 @@ def write_to_file(file, key, value) -> None:
     lock.release()
 
 
-def read_from_file(file, key) -> dict:
+def read_from_file(file, key) -> str:
     with open(file) as f:
         data = json.load(f)
         value = data.get(key)
