@@ -29,18 +29,19 @@ class TestBookstoreAPI:
         response = requests.get(url=f"{BASE_URL}/books?limit={display_limit}")
         assert response.status_code == 200
         response_content = json.loads(response.content)
-        assert type(response_content) is list and response_content is not []
+        assert isinstance(response_content, list) and response_content is not []
         for book in response_content:
-            assert type(book) is dict
-            assert type(book['id']) is int
-            assert type(book['name']) is str
-            assert type(book['type']) is str
-            assert type(book['available']) is bool
+            assert isinstance(book, dict)
+            assert isinstance(book['id'], int)
+            assert isinstance(book['name'], str)
+            assert isinstance(book['type'], str)
+            assert isinstance(book['available'], bool)
 
     def test_request_list_of_non_fiction_books(self) -> None:
         books_type = "non-fiction"  # accepted values "fiction" and "non-fiction"
         display_limit = 10
-        response = requests.get(url=f"{BASE_URL}/books?type={books_type}&limit={display_limit}")
+        response = requests.get(
+            url=f"{BASE_URL}/books?type={books_type}&limit={display_limit}")
         assert response.status_code == 200
         response_content = json.loads(response.content)
         assert type(response_content) is list and response_content is not []
@@ -51,9 +52,10 @@ class TestBookstoreAPI:
             assert type(book['available']) is bool
 
     def test_request_list_of_fiction_books(self) -> None:
-        books_type = "fiction" # accepted values "fiction" and "non-fiction"
+        books_type = "fiction"  # accepted values "fiction" and "non-fiction"
         display_limit = 10
-        response = requests.get(url=f"{BASE_URL}/books?type={books_type}&limit={display_limit}")
+        response = requests.get(
+            url=f"{BASE_URL}/books?type={books_type}&limit={display_limit}")
         assert response.status_code == 200
         response_content = json.loads(response.content)
         assert type(response_content) is list and response_content is not []
@@ -66,7 +68,8 @@ class TestBookstoreAPI:
     def test_request_non_existent_book_type(self) -> None:
         books_type = "sport"
         display_limit = 10
-        response = requests.get(url=f"{BASE_URL}/books?type={books_type}&limit={display_limit}")
+        response = requests.get(
+            url=f"{BASE_URL}/books?type={books_type}&limit={display_limit}")
         assert response.status_code == 400
         response_content = json.loads(response.content)
         assert response_content["error"] == \
@@ -75,7 +78,7 @@ class TestBookstoreAPI:
     def test_request_single_book(self) -> None:
         response = requests.get(url=f"{BASE_URL}/books/1")
         response_content = json.loads(response.content)
-        assert response_content is not {}
+        assert type(response_content) is dict and response_content is not {}
         assert response_content['id'] == 1
         assert response_content['name'] == 'The Russian'
         assert response_content['author'] == 'James Patterson and James O. Born'
@@ -100,7 +103,8 @@ class TestBookstoreAPI:
         assert response.status_code == 201
         response_content = json.loads(response.content)
         write_to_file(data_file, "customer_name", body["clientName"])
-        write_to_file(data_file, "access_token", response_content["accessToken"])
+        write_to_file(data_file, "access_token",
+                      response_content["accessToken"])
 
     def test_submit_new_book_order(self) -> None:
         token = read_from_file(data_file, "access_token")
@@ -109,10 +113,10 @@ class TestBookstoreAPI:
             "bookId": book_id,
             "customerName": read_from_file(data_file, "customer_name")
         }
-        headers = {
-            "Authorization": f"Bearer {token}"
-        }
-        response = requests.post(url=f"{BASE_URL}/orders", json=body, headers=headers)
+        headers = {"Authorization": f"Bearer {token}"}
+        response = requests.post(url=f"{BASE_URL}/orders",
+                                 json=body,
+                                 headers=headers)
         assert response.status_code == 201
         response_content = json.loads(response.content)
         assert response_content["created"] is True
@@ -137,10 +141,10 @@ class TestBookstoreAPI:
             "bookId": book_id,
             "customerName": read_from_file(data_file, "customer_name")
         }
-        headers = {
-            "Authorization": f"Bearer {token}"
-        }
-        response = requests.post(url=f"{BASE_URL}/orders", json=body, headers=headers)
+        headers = {"Authorization": f"Bearer {token}"}
+        response = requests.post(url=f"{BASE_URL}/orders",
+                                 json=body,
+                                 headers=headers)
         assert response.status_code == 400
         response_content = json.loads(response.content)
         assert response_content["error"] == "Invalid or missing bookId."
@@ -148,9 +152,7 @@ class TestBookstoreAPI:
     def test_request_all_book_orders(self) -> None:
         token = read_from_file(data_file, "access_token")
         customer_name = read_from_file(data_file, "customer_name")
-        headers = {
-            "Authorization": f"Bearer {token}"
-        }
+        headers = {"Authorization": f"Bearer {token}"}
         response = requests.get(url=f"{BASE_URL}/orders", headers=headers)
         assert response.status_code == 200
         response_content = json.loads(response.content)
@@ -172,10 +174,9 @@ class TestBookstoreAPI:
         token = read_from_file(data_file, "access_token")
         customer_name = read_from_file(data_file, "customer_name")
         order_id = read_from_file(data_file, "order_id")
-        headers = {
-            "Authorization": f"Bearer {token}"
-        }
-        response = requests.get(url=f"{BASE_URL}/orders/{order_id}", headers=headers)
+        headers = {"Authorization": f"Bearer {token}"}
+        response = requests.get(url=f"{BASE_URL}/orders/{order_id}",
+                                headers=headers)
         assert response.status_code == 200
         response_content = json.loads(response.content)
         assert type(response_content['id']) is str
@@ -195,10 +196,9 @@ class TestBookstoreAPI:
     def test_request_order_by_invalid_id(self) -> None:
         order_id = "qwert123"
         token = read_from_file(data_file, "access_token")
-        headers = {
-            "Authorization": f"Bearer {token}"
-        }
-        response = requests.get(url=f"{BASE_URL}/orders/{order_id}", headers=headers)
+        headers = {"Authorization": f"Bearer {token}"}
+        response = requests.get(url=f"{BASE_URL}/orders/{order_id}",
+                                headers=headers)
         assert response.status_code == 404
         response_content = json.loads(response.content)
         assert response_content["error"] == f"No order with id {order_id}."
@@ -207,15 +207,14 @@ class TestBookstoreAPI:
         token = read_from_file(data_file, "access_token")
         new_customer_name = "new_customer_name"
         order_id = read_from_file(data_file, "order_id")
-        headers = {
-            "Authorization": f"Bearer {token}"
-        }
-        body = {
-            "customerName": new_customer_name
-        }
-        response = requests.patch(url=f"{BASE_URL}/orders/{order_id}", json=body, headers=headers)
+        headers = {"Authorization": f"Bearer {token}"}
+        body = {"customerName": new_customer_name}
+        response = requests.patch(url=f"{BASE_URL}/orders/{order_id}",
+                                  json=body,
+                                  headers=headers)
         assert response.status_code == 204
-        response = requests.get(url=f"{BASE_URL}/orders/{order_id}", headers=headers)
+        response = requests.get(url=f"{BASE_URL}/orders/{order_id}",
+                                headers=headers)
         response_content = json.loads(response.content)
         assert response.status_code == 200
         assert response_content['customerName'] == new_customer_name
@@ -223,10 +222,9 @@ class TestBookstoreAPI:
     def test_unauthorized_updating_existing_order(self) -> None:
         new_customer_name = "new_customer_name"
         order_id = read_from_file(data_file, "order_id")
-        body = {
-            "customerName": new_customer_name
-        }
-        response = requests.patch(url=f"{BASE_URL}/orders/{order_id}", json=body)
+        body = {"customerName": new_customer_name}
+        response = requests.patch(url=f"{BASE_URL}/orders/{order_id}",
+                                  json=body)
         assert response.status_code == 401
         response_content = json.loads(response.content)
         assert response_content["error"] == "Missing Authorization header."
@@ -235,13 +233,11 @@ class TestBookstoreAPI:
         token = read_from_file(data_file, "access_token")
         new_customer_name = "new_customer_name"
         order_id = 'abc'
-        headers = {
-            "Authorization": f"Bearer {token}"
-        }
-        body = {
-            "customerName": new_customer_name
-        }
-        response = requests.patch(url=f"{BASE_URL}/orders/{order_id}", json=body, headers=headers)
+        headers = {"Authorization": f"Bearer {token}"}
+        body = {"customerName": new_customer_name}
+        response = requests.patch(url=f"{BASE_URL}/orders/{order_id}",
+                                  json=body,
+                                  headers=headers)
         assert response.status_code == 404
         response_content = json.loads(response.content)
         assert response_content["error"] == f"No order with id {order_id}."
@@ -249,12 +245,12 @@ class TestBookstoreAPI:
     def test_delete_existing_order(self) -> None:
         token = read_from_file(data_file, "access_token")
         order_id = read_from_file(data_file, "order_id")
-        headers = {
-            "Authorization": f"Bearer {token}"
-        }
-        response = requests.delete(url=f"{BASE_URL}/orders/{order_id}", headers=headers)
+        headers = {"Authorization": f"Bearer {token}"}
+        response = requests.delete(url=f"{BASE_URL}/orders/{order_id}",
+                                   headers=headers)
         assert response.status_code == 204
-        response = requests.get(url=f"{BASE_URL}/orders/{order_id}", headers=headers)
+        response = requests.get(url=f"{BASE_URL}/orders/{order_id}",
+                                headers=headers)
         assert response.status_code == 404
         response_content = json.loads(response.content)
         assert response_content["error"] == f"No order with id {order_id}."
