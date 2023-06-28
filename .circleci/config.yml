@@ -5,10 +5,22 @@ version: 2.1
 orbs:
   python: circleci/python@2.1.1
 
+executors:
+  python:
+    parameters:
+      tag:
+        type: string
+        default: latest
+    docker:
+      - image: cimg/python:<< parameters.tag >>
+
 jobs:
   build and test:
     working_directory: ~/pytest_api
-    executor: python/3.11.4-browsers
+    executor:
+      name: python
+      tag: 3.11.4-browsers
+
     steps:
       - checkout
       - python/install-packages:
