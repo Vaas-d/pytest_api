@@ -24,6 +24,9 @@ jobs:
     steps:
       - checkout
       - run:
+          name: List checked out files
+          command: ls -al
+      - run:
           name: Install requirements
           command: |
             pip install --no-cache-dir -r requirements.txt --user --upgrade
