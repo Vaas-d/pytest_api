@@ -4,11 +4,12 @@ version: 2.1
 
 jobs:
   build and test:
+    working_directory: ~/pytest_api
+    shell: /bin/bash -e
     docker:
-      - image: cimg/python:3.11.1
+      - image: cimg/python:3.11.4-browsers
     steps:
-      - run:
-          git clone https://github.com/Vaas-d/pytest_api.git
+      - checkout
       - run:
           name: Install dependencies
           command: |
@@ -29,5 +30,8 @@ jobs:
 workflows:
   test_my_code:
     jobs:
-      - build and test
+      - build and test:
+          filters:
+            branches:
+              only: main
 
