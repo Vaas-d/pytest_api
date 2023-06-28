@@ -3,3 +3,6 @@
 /tests/reports/*
 /.idea/*
 /tests/reports/
+__pycache__/
+tests/__pycache__/
+utils/__pycache__/
