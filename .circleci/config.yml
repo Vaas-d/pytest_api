@@ -45,4 +45,6 @@ workflows:
           filters:
             branches:
               only: main
+              ignore:
+                - gh-pages
 
