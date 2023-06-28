@@ -9,8 +9,12 @@ jobs:
     steps:
       - run:
           git clone https://github.com/Vaas-d/pytest_api.git
-      - python/install-packages:
-          pkg-manager: pipenv
+      - run:
+          name: Install dependencies
+          command: |
+            python -m pip install --upgrade pip
+            pip install pipenv
+            pipenv install --system
 
       - run:
           name: crate .env file
