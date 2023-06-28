@@ -23,8 +23,10 @@ jobs:
 
     steps:
       - checkout
-      - python/install-packages:
-          pkg-manager: pipenv
+      - run:
+          name: Install requirements
+          command: |
+            pip install --no-cache-dir -r requirements.txt --user --upgrade
 
       - run:
           name: crate .env file
